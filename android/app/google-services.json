@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "602464933285",
+    "project_id": "job-connect-d8fa7",
+    "storage_bucket": "job-connect-d8fa7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:602464933285:android:382277aeea9d14296e044c",
+        "android_client_info": {
+          "package_name": "com.leul.ecommerce"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsq9BaPAjD0oe45g0d4nb1LLin80EcqVM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
