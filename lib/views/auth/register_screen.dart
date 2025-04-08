@@ -1,8 +1,18 @@
+import 'package:ecommerce/controllers/auth_controller.dart';
 import 'package:ecommerce/views/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
+  @override
+  _RegisterScreenState createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final AuthController _authController = AuthController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late String email;
+  late String password;
+  late String fullName;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +40,9 @@ class RegisterScreen extends StatelessWidget {
               ),
               SizedBox(height: 20),
               TextFormField(
+                onChanged: (value) {
+                  email = value;
+                },
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please Email Address must Not Be Empty';
@@ -44,6 +57,9 @@ class RegisterScreen extends StatelessWidget {
               ),
               SizedBox(height: 20),
               TextFormField(
+                onChanged: (value) {
+                  fullName = value;
+                },
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Full name must not be empty';
@@ -61,6 +77,7 @@ class RegisterScreen extends StatelessWidget {
               ),
               SizedBox(height: 20),
               TextFormField(
+                onChanged: (value) => password = value,
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Password must not be empty';
@@ -79,8 +96,14 @@ class RegisterScreen extends StatelessWidget {
               SizedBox(height: 20),
               InkWell(
                 onTap: () {
+                  print('Register button clicked');
                   if (_formKey.currentState!.validate()) {
-                    print('validate');
+                    _authController.createNewUser(
+                      email: email,
+                      fullName: fullName,
+                      password: password,
+                    );
+                    print('successfully registered');
                   } else {
                     print('Not Validate');
                   }

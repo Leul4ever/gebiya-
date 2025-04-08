@@ -1,8 +1,15 @@
 import 'package:ecommerce/views/auth/register_screen.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late String email;
+  late String password;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +31,9 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               TextFormField(
+                onChanged: (value) {
+                  email = value;
+                },
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter your Email Address'; // <-- semicolon added here
@@ -36,6 +46,9 @@ class LoginScreen extends StatelessWidget {
 
               SizedBox(height: 20),
               TextFormField(
+                onChanged: (value) {
+                  password = value;
+                },
                 validator: (value) {
                   if (value!.isEmpty) {
                     return "Please Enter The password Must Not Be Empty";
@@ -53,7 +66,7 @@ class LoginScreen extends StatelessWidget {
                 onTap:
                     () => {
                       if (_formKey.currentState!.validate())
-                        {print('logged in ')}
+                        {print('logged in '), print(email), print(password)}
                       else
                         {print('unable to unauthenticated user')},
                     },
