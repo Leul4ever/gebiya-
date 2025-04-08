@@ -1,7 +1,10 @@
+import 'dart:typed_data'; // Changed from the internal VM library
+
 import 'package:ecommerce/controllers/auth_controller.dart';
 import 'package:ecommerce/views/auth/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -14,6 +17,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
   late String email;
   late String password;
   late String fullName;
+  Uint8List? _image;
+
+  selectGalleryImage() async {
+    Uint8List im = await _authController.pickProfileImage(ImageSource.gallery);
+    setState(() {
+      _image = im;
+    });
+  }
+
+  captureImage() async {
+    Uint8List im = await _authController.pickProfileImage(ImageSource.camera);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +57,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
               SizedBox(height: 20),
               Stack(
                 children: [
-                  CircleAvatar(radius: 56, child: Icon(Icons.person, size: 70)),
+                  _image == null
+                      ? CircleAvatar(
+                        radius: 56,
+                        child: Icon(Icons.person, size: 70),
+                      )
+                      : CircleAvatar(
+                        radius: 56,
+                        backgroundImage: MemoryImage(_image!),
+                      ),
                   Positioned(
                     right: 0,
-                    top: 30,
-                    child: Icon(CupertinoIcons.photo),
+                    top: 20,
+                    child: IconButton(
+                      icon: Icon(CupertinoIcons.photo),
+                      onPressed: () {
+                        selectGalleryImage();
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -132,11 +160,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         color: Colors.black.withOpacity(0.2),
                         spreadRadius: 1,
                         blurRadius: 5,
-                        offset: Offset(0, 3), // changes position of shadow
+                        offset: Offset(0, 3),
                       ),
                     ],
                   ),
-
                   child: Center(
                     child: Text(
                       "Register",
