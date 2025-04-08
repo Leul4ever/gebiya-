@@ -1,5 +1,6 @@
 import 'package:ecommerce/controllers/auth_controller.dart';
 import 'package:ecommerce/views/auth/login_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -37,6 +38,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   letterSpacing: 4,
                   fontSize: 22,
                 ),
+              ),
+              SizedBox(height: 20),
+              Stack(
+                children: [
+                  CircleAvatar(radius: 56, child: Icon(Icons.person, size: 70)),
+                  Positioned(
+                    right: 0,
+                    top: 30,
+                    child: Icon(CupertinoIcons.photo),
+                  ),
+                ],
               ),
               SizedBox(height: 20),
               TextFormField(
