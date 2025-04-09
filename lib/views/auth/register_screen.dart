@@ -1,5 +1,4 @@
 import 'dart:typed_data'; // Changed from the internal VM library
-
 import 'package:ecommerce/controllers/auth_controller.dart';
 import 'package:ecommerce/views/auth/login_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,6 +27,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   captureImage() async {
     Uint8List im = await _authController.pickProfileImage(ImageSource.camera);
+  }
+
+  registerUser() async {
+    if (_image != null) {
+      if (_formKey.currentState!.validate()) {
+        String res = await _authController.createNewUser(
+          email: email,
+          fullName: fullName,
+          password: password,
+          image: _image,
+        );
+        if (res == 'success') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return LoginScreen();
+              },
+            ),
+          );
+        } else {
+          print('Not Validate');
+        }
+      }
+    } else {
+      print('No Image Is Picked ');
+    }
   }
 
   @override
@@ -70,7 +96,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                       Positioned(
                         right: 0,
-                        top: 20,
+                        top: 10,
                         child: IconButton(
                           icon: Icon(CupertinoIcons.photo),
                           onPressed: () {
@@ -138,18 +164,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   SizedBox(height: 20),
                   InkWell(
                     onTap: () {
-                      print('Register button clicked');
-                      if (_formKey.currentState!.validate()) {
-                        _authController.createNewUser(
-                          email: email,
-                          fullName: fullName,
-                          password: password,
-                          image: _image,
-                        );
-                        print('successfully registered');
-                      } else {
-                        print('Not Validate');
-                      }
+                      registerUser();
                     },
                     child: Container(
                       height: 50,
