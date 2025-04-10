@@ -1,5 +1,8 @@
+import 'package:ecommerce/controllers/auth_controller.dart';
 import 'package:ecommerce/views/auth/register_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -7,9 +10,18 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final AuthController _authController = AuthController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late String email;
   late String password;
+  loginUser() async {
+    if (_formKey.currentState!.validate()) {
+      String res = await _authController.loginUser(email, password);
+      if (res == 'success') {
+        Get.snackbar('login success', 'You are now Logged in ');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,13 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               SizedBox(height: 20),
               InkWell(
-                onTap:
-                    () => {
-                      if (_formKey.currentState!.validate())
-                        {print('logged in '), print(email), print(password)}
-                      else
-                        {print('unable to unauthenticated user')},
-                    },
+                onTap: () => {loginUser()},
                 child: Container(
                   height: 50,
                   width: MediaQuery.of(context).size.width - 40,

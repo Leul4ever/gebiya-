@@ -61,4 +61,16 @@ class AuthController {
     }
     return res;
   }
+
+  //function login created user
+  Future<String> loginUser(String email, String password) async {
+    String res = 'Some error occured';
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      res = 'success';
+    } catch (e) {
+      res = e.toString();
+    }
+    return res;
+  }
 }
