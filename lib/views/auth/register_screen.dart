@@ -18,6 +18,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   late String password;
   late String fullName;
   Uint8List? _image;
+  bool _isLoading = false;
 
   selectGalleryImage() async {
     Uint8List im = await _authController.pickProfileImage(ImageSource.gallery);
@@ -33,21 +34,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
   registerUser() async {
     if (_image != null) {
       if (_formKey.currentState!.validate()) {
+        setState(() {
+          _isLoading = true;
+        });
         String res = await _authController.createNewUser(
           email: email,
           fullName: fullName,
           password: password,
           image: _image,
         );
+        setState(() {
+          _isLoading = false;
+        });
         if (res == 'success') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return LoginScreen();
-              },
-            ),
-          );
+          _isLoading = false;
+          Get.to(LoginScreen());
           Get.snackbar(
             'Registration successful',
             'Account has been created for you',
@@ -209,15 +210,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ],
                       ),
                       child: Center(
-                        child: Text(
-                          "Register",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            letterSpacing: 2,
-                          ),
-                        ),
+                        child:
+                            _isLoading
+                                ? CircularProgressIndicator(color: Colors.white)
+                                : Text(
+                                  "Register",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    letterSpacing: 2,
+                                  ),
+                                ),
                       ),
                     ),
                   ),

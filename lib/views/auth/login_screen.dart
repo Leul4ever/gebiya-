@@ -14,8 +14,12 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late String email;
   late String password;
+  bool _isLoading = false;
   loginUser() async {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
       String res = await _authController.loginUser(email, password);
       if (res == 'success') {
         Get.snackbar(
@@ -25,6 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
           colorText: Colors.white,
         );
       } else {
+        _isLoading = false;
         Get.snackbar(
           'Error Occurred',
           res.toString(),
