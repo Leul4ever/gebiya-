@@ -3,6 +3,7 @@ import 'package:ecommerce/controllers/auth_controller.dart';
 import 'package:ecommerce/views/auth/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -47,12 +48,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
               },
             ),
           );
+          Get.snackbar(
+            'Registration successful',
+            'Account has been created for you',
+            backgroundColor: Colors.pink,
+            colorText: Colors.white,
+            margin: EdgeInsets.all(15),
+            icon: Icon(Icons.message, color: Colors.white),
+          );
         } else {
-          print('Not Validate');
+          Get.snackbar(
+            'error Occurred ',
+            res.toString(),
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.BOTTOM,
+            icon: Icon(Icons.message, color: Colors.white),
+          );
         }
+      } else {
+        Get.snackbar('Form', "Form Field is not Valid ");
       }
     } else {
-      print('No Image Is Picked ');
+      Get.snackbar(
+        'No Image ',
+        'Please Capture  or select an image ',
+        backgroundColor: Colors.pink,
+        colorText: Colors.white,
+        margin: EdgeInsets.all(15),
+        snackPosition: SnackPosition.BOTTOM,
+        icon: Icon(Icons.message, color: Colors.white),
+      );
     }
   }
 

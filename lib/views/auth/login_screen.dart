@@ -18,7 +18,20 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState!.validate()) {
       String res = await _authController.loginUser(email, password);
       if (res == 'success') {
-        Get.snackbar('login success', 'You are now Logged in ');
+        Get.snackbar(
+          'login success',
+          'You are now Logged in ',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      } else {
+        Get.snackbar(
+          'Error Occurred',
+          res.toString(),
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+        );
       }
     }
   }
