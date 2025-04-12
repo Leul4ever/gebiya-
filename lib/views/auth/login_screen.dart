@@ -1,4 +1,5 @@
 import 'package:ecommerce/controllers/auth_controller.dart';
+import 'package:ecommerce/views/auth/map_screen.dart';
 import 'package:ecommerce/views/auth/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,7 +22,15 @@ class _LoginScreenState extends State<LoginScreen> {
         _isLoading = true;
       });
       String res = await _authController.loginUser(email, password);
+      // The _isLoading variable is necessary to manage the loading state of the UI,
+      // indicating to the user that a login process is ongoing. This prevents
+      // multiple submissions and enhances user experience.
+      setState(() {
+        _isLoading =
+            false; // Corrected the variable name to match the defined variable
+      });
       if (res == 'success') {
+        Get.to(MapScreen());
         Get.snackbar(
           'login success',
           'You are now Logged in ',
@@ -29,7 +38,6 @@ class _LoginScreenState extends State<LoginScreen> {
           colorText: Colors.white,
         );
       } else {
-        _isLoading = false;
         Get.snackbar(
           'Error Occurred',
           res.toString(),
@@ -111,15 +119,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                   child: Center(
-                    child: Text(
-                      "login",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        letterSpacing: 2,
-                      ),
-                    ),
+                    child:
+                        _isLoading
+                            ? CircularProgressIndicator(color: Colors.white)
+                            : Text(
+                              "login",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                letterSpacing: 2,
+                              ),
+                            ),
                   ),
                 ),
               ),
