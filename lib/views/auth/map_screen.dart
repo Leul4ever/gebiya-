@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -11,16 +10,15 @@ class MapScreen extends StatefulWidget {
   State<MapScreen> createState() => _MapScreenState();
 }
 
-final Completer<GoogleMapController> _controller =
-    Completer<GoogleMapController>();
-State<MapScreen> createState() => _MapScreenState();
-
-const CameraPosition _kGooglePlex = CameraPosition(
-  target: LatLng(37.42796133580664, -122.085749655962),
-  zoom: 14.4746,
-);
-
 class _MapScreenState extends State<MapScreen> {
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
+
+  static const CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14.4746,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +26,7 @@ class _MapScreenState extends State<MapScreen> {
         children: [
           GoogleMap(
             padding: EdgeInsets.only(bottom: 200),
-            mapType: MapType.normal, // Corrected 'mapType' to 'MapType'
+            mapType: MapType.normal,
             initialCameraPosition: _kGooglePlex,
             onMapCreated: (GoogleMapController controller) {
               _controller.complete(controller);
