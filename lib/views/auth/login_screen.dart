@@ -1,151 +1,120 @@
-import 'package:ecommerce/controllers/auth_controller.dart';
-import 'package:ecommerce/views/auth/map_screen.dart';
-import 'package:ecommerce/views/auth/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final AuthController _authController = AuthController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late String email;
-  late String password;
-  bool _isLoading = false;
-  loginUser() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
-      String res = await _authController.loginUser(email, password);
-      // The _isLoading variable is necessary to manage the loading state of the UI,
-      // indicating to the user that a login process is ongoing. This prevents
-      // multiple submissions and enhances user experience.
-      setState(() {
-        _isLoading =
-            false; // Corrected the variable name to match the defined variable
-      });
-      if (res == 'success') {
-        Get.to(MapScreen());
-        Get.snackbar(
-          'login success',
-          'You are now Logged in ',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-      } else {
-        Get.snackbar(
-          'Error Occurred',
-          res.toString(),
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-        );
-      }
-    }
-  }
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  bool isObscure = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(15),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                "Login Account  ",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 4,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Text(
+                  'Welcome Back',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-              ),
-              TextFormField(
-                onChanged: (value) {
-                  email = value;
-                },
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter your Email Address'; // <-- semicolon added here
-                  } else {
+                const SizedBox(height: 30),
+                TextFormField(
+                  controller: emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    prefixIcon: Icon(Icons.email),
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    if (!GetUtils.isEmail(value)) {
+                      return 'Please enter a valid email';
+                    }
                     return null;
-                  }
-                },
-                decoration: InputDecoration(label: Text('Email')),
-              ),
-
-              SizedBox(height: 20),
-              TextFormField(
-                onChanged: (value) {
-                  password = value;
-                },
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Please Enter The password Must Not Be Empty";
-                  }
-                  if (value.length < 6) {
-                    return 'Password must be at least 6 characters';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(label: Text('Password')),
-                obscureText: true,
-              ),
-              SizedBox(height: 20),
-              InkWell(
-                onTap: () => {loginUser()},
-                child: Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width - 40,
-                  decoration: BoxDecoration(
-                    color: Colors.pink,
-                    border: Border.all(color: Colors.black, width: 1),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        spreadRadius: 1,
-                        blurRadius: 5,
-                        offset: Offset(0, 3), // changes position of shadow
+                  },
+                ),
+                const SizedBox(height: 20),
+                TextFormField(
+                  controller: passwordController,
+                  obscureText: isObscure,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    prefixIcon: const Icon(Icons.lock),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        isObscure ? Icons.visibility_off : Icons.visibility,
                       ),
-                    ],
+                      onPressed: () {
+                        setState(() {
+                          isObscure = !isObscure;
+                        });
+                      },
+                    ),
+                    border: const OutlineInputBorder(),
                   ),
-                  child: Center(
-                    child:
-                        _isLoading
-                            ? CircularProgressIndicator(color: Colors.white)
-                            : Text(
-                              "login",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                letterSpacing: 2,
-                              ),
-                            ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    if (value.length < 6) {
+                      return 'Password must be at least 6 characters';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 30),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      // Implement login functionality here
+                      // For now, let's just print the values
+                      print('Email: ${emailController.text}');
+                      print('Password: ${passwordController.text}');
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                  ),
+                  child: const Text(
+                    'LOGIN',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              TextButton(
-                onPressed:
-                    () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => RegisterScreen()),
-                    ),
-                child: Text('Need an account '),
-              ),
-            ],
+                const SizedBox(height: 15),
+                TextButton(
+                  onPressed: () {
+                    // Navigate to register screen
+                  },
+                  child: const Text('Don\'t have an account? Sign up'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-}
+} 
